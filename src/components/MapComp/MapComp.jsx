@@ -31,7 +31,7 @@ function MapComp() {
     useEffect(() => {
         const watchId = navigator.geolocation.watchPosition(
             (pos) => {
-                alert(JSON.stringify(pos))
+                alert(JSON.stringify(position))
                 setPosition({
                     latitude: pos.coords.latitude || 25.0,
                     longitude: pos.coords.longitude || 55.0,

@@ -41,7 +41,7 @@ function MapComp() {
                 setPosition({
                     latitude: pos.coords.latitude || 25.0,
                     longitude: pos.coords.longitude || 55.0,
-                    speed: !!pos.coords.speed && `${pos.coords.speed / 3.6} km/h` || 'NA', // Speed in meters per second
+                    speed: `${pos.coords.speed / 3.6} km/h` || 'NA', // Speed in meters per second
                     heading: pos.coords.heading || 'NA', // Orientation in degrees, 0-360
                     accuracy: pos.coords.accuracy || 'NA', // Accuracy in meters
                 })

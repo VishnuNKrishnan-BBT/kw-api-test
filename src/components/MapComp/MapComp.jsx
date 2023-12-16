@@ -14,7 +14,7 @@ function MapComp() {
     const [viewport, setViewport] = useState({
         latitude: position?.latitude || 25.0,
         longitude: position?.longitude || 55.0,
-        zoom: 12,
+        zoom: 18,
         pitch: 75,
         bearing: 0
     })
@@ -46,13 +46,14 @@ function MapComp() {
                     accuracy: pos.coords.accuracy?.toFixed(3) || 'NA', // Accuracy in meters
                 })
 
-                setViewport({
-                    latitude: pos.coords.latitude || 25.0,
-                    longitude: pos.coords.longitude || 55.0,
-                    zoom: viewport.zoom,
-                    pitch: viewport.pitch,
-                    bearing: viewport.bearing
-                })
+                // setViewport({
+                //     latitude: pos.coords.latitude || 25.0,
+                //     longitude: pos.coords.longitude || 55.0,
+                //     zoom: viewport.zoom,
+                //     pitch: viewport.pitch,
+                //     bearing: viewport.bearing
+                // })
+                mapRef.current.flyTo({ center: [pos.coords.latitude || 25.0, pos.coords.longitude || 55.0], duration: 60000 })
             },
             (err) => {
                 setError(err.message);

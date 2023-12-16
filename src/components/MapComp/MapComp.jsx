@@ -12,8 +12,8 @@ function MapComp() {
     const [error, setError] = useState(null);
 
     const [viewport, setViewport] = useState({
-        latitude: position?.latitude || 0,
-        longitude: position?.longitude || 0,
+        latitude: position?.latitude || 25.0,
+        longitude: position?.longitude || 55.0,
         zoom: 12,
         pitch: 75,
         bearing: 0
@@ -32,8 +32,8 @@ function MapComp() {
         const watchId = navigator.geolocation.watchPosition(
             (pos) => {
                 setPosition({
-                    latitude: pos.coords.latitude || 'NA',
-                    longitude: pos.coords.longitude || 'NA',
+                    latitude: pos.coords.latitude || 25.0,
+                    longitude: pos.coords.longitude || 55.0,
                     speed: !!pos.coords.speed && `${pos.coords.speed / 3.6} km/h` || 'NA', // Speed in meters per second
                     heading: pos.coords.heading || 'NA', // Orientation in degrees, 0-360
                     accuracy: pos.coords.accuracy || 'NA', // Accuracy in meters
@@ -75,8 +75,8 @@ function MapComp() {
                     />
                 </Source>
                 <Marker
-                    latitude={position?.latitude || 0}
-                    longitude={position?.latitude || 0}
+                    latitude={position?.latitude || 25.0}
+                    longitude={position?.latitude || 55.0}
                 >
                     <div className={mapStyles.mapMarker}>
                         <img src={'https://upload.wikimedia.org/wikipedia/commons/9/93/Map_marker_font_awesome.svg'} alt="" />

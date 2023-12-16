@@ -45,6 +45,14 @@ function MapComp() {
                     heading: pos.coords.heading.toFixed(3) || 'NA', // Orientation in degrees, 0-360
                     accuracy: pos.coords.accuracy.toFixed(3) || 'NA', // Accuracy in meters
                 })
+
+                setViewport({
+                    latitude: pos.coords.latitude || 25.0,
+                    longitude: pos.coords.longitude || 55.0,
+                    zoom: viewport.zoom,
+                    pitch: viewport.pitch,
+                    bearing: viewport.bearing
+                })
             },
             (err) => {
                 setError(err.message);

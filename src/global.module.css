@@ -1,0 +1,97 @@
+/* Responsive breakpoints */
+
+/*
+X-Small	< 576px - @media only screen and (max-width: 575px) {...}
+Small	≥ 576px - @media only screen and (min-width: 576px) {...}
+Medium	≥ 768px - @media only screen and (min-width: 768px) {...}
+Large	≥ 992px - @media only screen and (min-width: 992px) {...}
+Extra large	≥ 1200px - @media only screen and (min-width: 1200px) {...}
+Extra extra large   ≥ 1400px - @media only screen and (min-width: 1400px) {...}
+*/
+
+@media only screen and (max-width: 576px){
+    .hideOnMobile{
+        display: none !important;
+    }
+
+    .fullWidthOnMobile{
+        width: 100% !important;
+    }
+}
+
+@media only screen and (min-width: 577px) and (max-width: 767px){
+    .hideOnTab{
+        display: none !important;
+    }
+}
+
+@media only screen and (min-width: 768px){
+    .hideOnDesktop{
+        display: none !important;
+    }
+}
+
+.brandBG{
+    background-color: rgba(187,207,182,255);
+}
+
+.fullScreen{
+    height: 100vh;
+    width: 100%;
+}
+
+.fullScreenWithTitleBar{
+    height: calc(100vh - 4rem);
+    width: 100%;
+}
+
+.overflowScroll{
+    overflow: scroll;
+}
+
+.displayFlex{
+    display: flex;
+}
+
+/* ONLY FOR DISPLAY FLEX */
+.XYAlignCenter{ 
+    justify-content: center;
+    align-items: center;
+}
+
+a{
+    text-decoration: none;
+}
+
+/* MISC */
+.mNone{
+    margin: none;
+}
+
+.pNone{
+    padding: none;
+}
+
+.ml5px{
+    margin-left: 5px;
+}
+
+.w12p5perc{
+    width: 12.5%;
+}
+
+.w25perc{
+    width: 25%;
+}
+
+.w50perc{
+    width: 50%;
+}
+
+.w75perc{
+    width: 75%;
+}
+
+.w100perc{
+    width: 100%;
+}

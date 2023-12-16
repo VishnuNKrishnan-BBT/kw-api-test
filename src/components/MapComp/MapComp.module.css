@@ -1,0 +1,46 @@
+.wrapper{
+    position: fixed;
+    height: 80vh;
+    width: 100vw;
+    /* border: 2px solid red; */
+    overflow: hidden;
+    z-index: 1;
+}
+
+.dataHolder{
+    position: fixed;
+    width: 100%;
+    z-index: 5;
+    background: rgb(17,17,17);
+    background: linear-gradient(0deg, rgba(17,17,17,1) 0%, rgba(70,70,70,1) 100%);
+    display: grid;
+    grid-template-columns: auto auto auto;
+    gap: 3px;
+}
+
+.dataCard{
+    padding: 5px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    z-index: 5;
+    width: 120px;
+    /* background-color: brown; */
+}
+
+.coords{
+    margin: 0;
+    color: #eee;
+    width: fit-content;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.mapMarker{
+    height: 50px;
+    width: 50px;
+    background-color: black;
+    border-radius: 50%;
+    z-index: 10;
+}

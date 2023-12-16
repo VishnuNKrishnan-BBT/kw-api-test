@@ -29,6 +29,12 @@ function MapComp() {
     }
 
     useEffect(() => {
+        const options = {
+            enableHighAccuracy: true,   // Request high-accuracy location data
+            timeout: 5000,              // Maximum time (in milliseconds) to wait for location data
+            maximumAge: 0               // Maximum age (in milliseconds) of cached location data
+        };
+
         const watchId = navigator.geolocation.watchPosition(
             (pos) => {
                 // alert(JSON.stringify(pos))
@@ -42,7 +48,8 @@ function MapComp() {
             },
             (err) => {
                 setError(err.message);
-            }
+            },
+            options
         )
 
         return () => {

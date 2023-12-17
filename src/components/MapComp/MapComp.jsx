@@ -53,7 +53,7 @@ function MapComp() {
                 //     pitch: viewport.pitch,
                 //     bearing: viewport.bearing
                 // })
-                mapRef.current?.flyTo({ center: [pos.coords.latitude || 25.0, pos.coords.longitude || 55.0], duration: 2000 })
+                mapRef.current?.flyTo({ center: [pos.coords.longitude || 55.0, pos.coords.latitude || 25.0], duration: 2000 })
             },
             (err) => {
                 setError(err.message);

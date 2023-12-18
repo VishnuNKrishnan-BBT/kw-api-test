@@ -39,9 +39,10 @@
 }
 
 .mapMarker{
-    height: 50px;
-    width: 50px;
-    background-color: black;
-    border-radius: 50%;
-    z-index: 10;
+    display: absolute;
+    /* height: 50px; */
+    width: fit-content;
+    background-color: rgb(142, 142, 142);
+    border-radius: 5px;
+    z-index: 50;
 }

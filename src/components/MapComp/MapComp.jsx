@@ -15,7 +15,7 @@ function MapComp() {
         latitude: position?.latitude || 25.0,
         longitude: position?.longitude || 55.0,
         zoom: 18,
-        pitch: 75,
+        pitch: 0,
         bearing: 0
     })
 
@@ -41,7 +41,7 @@ function MapComp() {
                 setPosition({
                     latitude: pos.coords.latitude || 25.0,
                     longitude: pos.coords.longitude || 55.0,
-                    speed: `${(pos.coords.speed / 3.6)?.toFixed(3)} km/h` || 'NA', // Speed in meters per second
+                    speed: `${(pos.coords.speed * 3.6)?.toFixed(0)} km/h` || 'NA', // Speed in meters per second
                     heading: pos.coords.heading?.toFixed(3) || 'NA', // Orientation in degrees, 0-360
                     accuracy: pos.coords.accuracy?.toFixed(3) || 'NA', // Accuracy in meters
                 })
@@ -69,6 +69,7 @@ function MapComp() {
     return (
         <div className={`${mapStyles.wrapper}`}>
             <Map
+                attributionControl={false}
                 {...viewport}
                 ref={mapRef}
                 projection={"globe"}
@@ -90,17 +91,23 @@ function MapComp() {
                             "line-width": 3
                         }}
                     />
-                </Source>
-                <Marker
-                    latitude={position?.latitude || 25.0}
-                    longitude={position?.latitude || 55.0}
-                >
-                    <div className={mapStyles.mapMarker}>
-                        <img src={'https://upload.wikimedia.org/wikipedia/commons/9/93/Map_marker_font_awesome.svg'} alt="" />
-                        {/* <GoogleIcon iconName={'assistant_navigation'} /> */}
 
-                    </div>
-                </Marker>
+                    {!!position?.latitude && !!position?.longitude &&
+                        <Marker
+                            anchor='center'
+                            latitude={position?.latitude}
+                            longitude={position?.longitude}
+                            pitchAlignment='map'
+                            rotationAlignment='map'
+                        >
+                            <div className={mapStyles.mapMarker}>
+                                {/* <img src={'https://upload.wikimedia.org/wikipedia/commons/9/93/Map_marker_font_awesome.svg'} alt="" /> */}
+                                <div className={mapStyles.mapMarker}>
+                                    <GoogleIcon iconName={'assistant_navigation'} />
+                                </div>
+                            </div>
+                        </Marker>}
+                </Source>
             </Map>
 
             <div className={`${mapStyles.dataHolder}`}>

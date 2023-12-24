@@ -79,7 +79,7 @@ function MapComp() {
                 'Authorization': 'your-secret-token'
             };
 
-            const apiBody = !!position ? {
+            const apiBody = position ? {
                 timestamp: timestamp,
                 trackerId: 'API_TEST_MOB',
                 latitude: position.latitude,
@@ -93,6 +93,7 @@ function MapComp() {
                 setSentContent(apiBody)
                 const response = await uploadWaypoint(apiBody, headers)
                 setReceivedContent(response)
+                navigator?.vibrate(400)
             } else {
                 setSentContent("{message: 'apiBody is null...'}")
             }

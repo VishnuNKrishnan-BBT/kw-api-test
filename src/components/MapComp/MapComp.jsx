@@ -82,11 +82,11 @@ function MapComp() {
             const apiBody = {
                 timestamp: timestamp,
                 trackerId: 'API_TEST_MOB',
-                latitude: position.latitude,
-                longitude: position.longitude,
-                speed: position.speed,
-                accuracy: position.accuracy,
-                heading: position.heading,
+                latitude: position?.latitude,
+                longitude: position?.longitude,
+                speed: position?.speed,
+                accuracy: position?.accuracy,
+                heading: position?.heading,
             }
 
             if (apiBody !== null) {

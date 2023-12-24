@@ -9,7 +9,7 @@ function MapComp() {
 
     const mapRef = useRef(null)
 
-    const [position, setPosition] = useState(null);
+    const [position, setPosition] = useState({});
     const [error, setError] = useState(null);
 
     const [sentContent, setSentContent] = useState('')
@@ -32,6 +32,32 @@ function MapComp() {
         }
     }
 
+    var newPosition = {}
+
+    const periodicUpload = async (position) => {
+        const timestamp = Date.now()
+
+        const headers = {
+            'Content-Type': 'application/json',
+            'Authorization': 'your-secret-token'
+        };
+
+        console.log(position);
+
+        const apiBody = {
+            timestamp: timestamp,
+            trackerId: 'API_TEST_MOB',
+            ...position
+        }
+
+        setSentContent(apiBody)
+        const response = await uploadWaypoint(apiBody, headers)
+        setReceivedContent(response)
+        navigator?.vibrate(400)
+    }
+
+
+
     useEffect(() => {
         const options = {
             enableHighAccuracy: true,   // Request high-accuracy location data
@@ -43,12 +69,20 @@ function MapComp() {
             (pos) => {
                 // alert(JSON.stringify(pos))
                 setPosition({
-                    latitude: pos.coords.latitude || 25.0,
-                    longitude: pos.coords.longitude || 55.0,
-                    speed: `${(pos.coords.speed * 3.6)?.toFixed(0)} km/h` || 'NA', // Speed in meters per second
-                    heading: pos.coords.heading?.toFixed(3) || 'NA', // Orientation in degrees, 0-360
-                    accuracy: pos.coords.accuracy?.toFixed(3) || 'NA', // Accuracy in meters
+                    latitude: pos.coords.latitude || undefined,
+                    longitude: pos.coords.longitude || undefined,
+                    speed: `${(pos.coords.speed * 3.6)?.toFixed(0)} km/h` || undefined, // Speed in meters per second
+                    heading: pos.coords.heading?.toFixed(3) || 0, // Orientation in degrees, 0-360
+                    accuracy: pos.coords.accuracy?.toFixed(3) || undefined, // Accuracy in meters
                 })
+
+                newPosition = {
+                    latitude: pos.coords.latitude,
+                    longitude: pos.coords.longitude,
+                    speed: pos.coords.speed || 0, // Speed in meters per second
+                    heading: pos.coords.heading?.toFixed(3) || 0, // Orientation in degrees, 0-359
+                    accuracy: pos.coords.accuracy?.toFixed(3), // Accuracy in meters
+                }
 
                 // setViewport({
                 //     latitude: pos.coords.latitude || 25.0,
@@ -65,43 +99,11 @@ function MapComp() {
             options
         )
 
-        return () => {
-            navigator.geolocation.clearWatch(watchId);
-        }
-    }, [])
-
-    useEffect(() => {
-        const interval = setInterval(async () => {
-            const timestamp = Date.now()
-
-            const headers = {
-                'Content-Type': 'application/json',
-                'Authorization': 'your-secret-token'
-            };
-
-            const apiBody = {
-                timestamp: timestamp,
-                trackerId: 'API_TEST_MOB',
-                latitude: position?.latitude,
-                longitude: position?.longitude,
-                speed: position?.speed,
-                accuracy: position?.accuracy,
-                heading: position?.heading,
-            }
-
-            if (apiBody !== null) {
-                setSentContent(apiBody)
-                const response = await uploadWaypoint(apiBody, headers)
-                setReceivedContent(response)
-                navigator?.vibrate(400)
-            } else {
-                setSentContent("{message: 'apiBody is null...'}")
-            }
-
-        }, 5000)
+        const interval = setInterval(() => { periodicUpload(newPosition) }, 5000)
 
         return () => {
             clearInterval(interval)
+            navigator.geolocation.clearWatch(watchId);
         }
     }, [])
 
@@ -166,19 +168,19 @@ function MapComp() {
 
             <div className={`${mapStyles.dataHolder}`}>
                 <div className={mapStyles.dataCard}>
-                    <span className={`${mapStyles.coords}`}><GoogleIcon iconName={'swap_horiz'} style={{ marginRight: '3px', fontWeight: 200 }} />{position?.latitude}</span>
+                    <span className={`${mapStyles.coords}`}><GoogleIcon iconName={'swap_horiz'} style={{ marginRight: '3px', fontWeight: 200 }} />{position?.latitude || 'NA'}</span>
                 </div>
                 <div className={mapStyles.dataCard}>
-                    <span className={`${mapStyles.coords}`}><GoogleIcon iconName={'swap_vert'} style={{ marginRight: '3px', fontWeight: 200 }} />{position?.longitude}</span>
+                    <span className={`${mapStyles.coords}`}><GoogleIcon iconName={'swap_vert'} style={{ marginRight: '3px', fontWeight: 200 }} />{position?.longitude || 'NA'}</span>
                 </div>
                 <div className={mapStyles.dataCard}>
-                    <span className={`${mapStyles.coords}`}><GoogleIcon iconName={'speed'} style={{ marginRight: '3px', fontWeight: 200 }} />{position?.speed}</span>
+                    <span className={`${mapStyles.coords}`}><GoogleIcon iconName={'speed'} style={{ marginRight: '3px', fontWeight: 200 }} />{position?.speed ? `${position?.speed * 3.6} km/h` : 'NA'}</span>
                 </div>
                 <div className={mapStyles.dataCard}>
-                    <span className={`${mapStyles.coords}`}><GoogleIcon iconName={'explore'} style={{ marginRight: '3px', fontWeight: 200 }} />{position?.heading}</span>
+                    <span className={`${mapStyles.coords}`}><GoogleIcon iconName={'explore'} style={{ marginRight: '3px', fontWeight: 200 }} />{position?.heading || 'NA'}</span>
                 </div>
                 <div className={mapStyles.dataCard}>
-                    <span className={`${mapStyles.coords}`}><GoogleIcon iconName={'zoom_in_map'} style={{ marginRight: '3px', fontWeight: 200 }} />{position?.accuracy}</span>
+                    <span className={`${mapStyles.coords}`}><GoogleIcon iconName={'zoom_in_map'} style={{ marginRight: '3px', fontWeight: 200 }} />{position?.accuracy || 'NA'}</span>
                 </div>
             </div>
         </div>

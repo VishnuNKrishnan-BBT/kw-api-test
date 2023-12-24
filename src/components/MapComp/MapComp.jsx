@@ -115,7 +115,6 @@ function MapComp() {
                 sentContent={sentContent}
                 receivedContent={receivedContent}
                 expanded={consoleExpanded}
-                onClick={toggleConsole}
             />
             <div className={`${mapStyles.consoleToggleBtn}`} onClick={toggleConsole}>
                 <GoogleIcon iconName={'data_object'} style={{ fontSize: '35px', fontWeight: 900 }} />

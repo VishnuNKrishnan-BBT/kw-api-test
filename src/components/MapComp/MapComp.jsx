@@ -79,7 +79,7 @@ function MapComp() {
                 'Authorization': 'your-secret-token'
             };
 
-            const apiBody = position ? {
+            const apiBody = {
                 timestamp: timestamp,
                 trackerId: 'API_TEST_MOB',
                 latitude: position.latitude,
@@ -87,7 +87,7 @@ function MapComp() {
                 speed: position.speed,
                 accuracy: position.accuracy,
                 heading: position.heading,
-            } : null
+            }
 
             if (apiBody !== null) {
                 setSentContent(apiBody)

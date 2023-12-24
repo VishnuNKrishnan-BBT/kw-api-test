@@ -1,7 +1,7 @@
 .wrapper{
     position: fixed;
-    height: 100vh;
-    width: 100vw;
+    height: calc(100vh);
+    width: calc(100vw);
     /* border: 2px solid red; */
     overflow: hidden;
     z-index: 1;
@@ -39,10 +39,25 @@
 }
 
 .mapMarker{
-    display: absolute;
+    position: absolute;
     /* height: 50px; */
     width: fit-content;
     background-color: rgb(142, 142, 142);
     border-radius: 5px;
     z-index: 50;
+}
+
+.consoleToggleBtn{
+    position: fixed;
+    bottom: 82px;
+    right: 10px;
+    height: 75px;
+    width: 75px;
+    border-radius: 5px;
+    background-color: #eee;
+    z-index: 11;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }

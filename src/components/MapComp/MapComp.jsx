@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from 'react'
 import Map, { Source, Layer, Marker } from 'react-map-gl'
 import mapStyles from './MapComp.module.css'
 import GoogleIcon from '../GoogleIcon/GoogleIcon'
-import InputWithIcon from '../InputWithIcon/InputWithIcon'
+import CommsDisplay from '../CommsDisplay/CommsDisplay'
+import { uploadWaypoint } from '../../helpers/uploadWaypoint'
 
 function MapComp() {
 
@@ -10,6 +11,9 @@ function MapComp() {
 
     const [position, setPosition] = useState(null);
     const [error, setError] = useState(null);
+
+    const [sentContent, setSentContent] = useState('')
+    const [receivedContent, setReceivedContent] = useState('')
 
     const [viewport, setViewport] = useState({
         latitude: position?.latitude || 25.0,
@@ -66,12 +70,62 @@ function MapComp() {
         }
     }, [])
 
+    useEffect(() => {
+        const interval = setInterval(async () => {
+            const timestamp = Date.now()
+
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': 'your-secret-token'
+            };
+
+            const apiBody = !!position ? {
+                timestamp: timestamp,
+                trackerId: 'API_TEST_MOB',
+                latitude: position.latitude,
+                longitude: position.longitude,
+                speed: position.speed,
+                accuracy: position.accuracy,
+                heading: position.heading,
+            } : null
+
+            if (apiBody !== null) {
+                setSentContent(apiBody)
+                const response = await uploadWaypoint(apiBody, headers)
+                setReceivedContent(response)
+            } else {
+                setSentContent("{message: 'apiBody is null...'}")
+            }
+
+        }, 5000)
+
+        return () => {
+            clearInterval(interval)
+        }
+    }, [])
+
+    const [consoleExpanded, setConsoleExpanded] = useState(false)
+    const toggleConsole = () => {
+        setConsoleExpanded(!consoleExpanded)
+    }
+
     return (
         <div className={`${mapStyles.wrapper}`}>
+            <CommsDisplay
+                sentContent={sentContent}
+                receivedContent={receivedContent}
+                expanded={consoleExpanded}
+                onClick={toggleConsole}
+            />
+            <div className={`${mapStyles.consoleToggleBtn}`} onClick={toggleConsole}>
+                <GoogleIcon iconName={'data_object'} style={{ fontSize: '35px', fontWeight: 900 }} />
+            </div>
             <Map
                 attributionControl={false}
                 {...viewport}
                 ref={mapRef}
+                height={"100%"}
+                width={"100%"}
                 projection={"globe"}
                 mapboxAccessToken={process.env.REACT_APP_MAPBOX_ACCESS_TOKEN}
                 mapStyle={"mapbox://styles/mapbox/streets-v12"}

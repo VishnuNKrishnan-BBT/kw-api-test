@@ -99,7 +99,7 @@ function MapComp() {
             options
         )
 
-        const interval = setInterval(() => { periodicUpload(newPosition) }, 5000)
+        const interval = setInterval(() => { periodicUpload(newPosition) }, 2000)
 
         return () => {
             clearInterval(interval)

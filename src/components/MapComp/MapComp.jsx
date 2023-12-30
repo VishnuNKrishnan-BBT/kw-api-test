@@ -1,9 +1,11 @@
 import React, { useState, useEffect, useRef } from 'react'
 import Map, { Source, Layer, Marker } from 'react-map-gl'
+import 'mapbox-gl/dist/mapbox-gl.css';
 import mapStyles from './MapComp.module.css'
 import GoogleIcon from '../GoogleIcon/GoogleIcon'
 import CommsDisplay from '../CommsDisplay/CommsDisplay'
 import { uploadWaypoint } from '../../helpers/uploadWaypoint'
+import VehicleTop from '../assets/vehicleTop0.png'
 
 function MapComp() {
 
@@ -156,11 +158,8 @@ function MapComp() {
                             pitchAlignment='map'
                             rotationAlignment='map'
                         >
-                            <div className={mapStyles.mapMarker}>
-                                {/* <img src={'https://upload.wikimedia.org/wikipedia/commons/9/93/Map_marker_font_awesome.svg'} alt="" /> */}
-                                <div className={mapStyles.mapMarker}>
-                                    <GoogleIcon iconName={'assistant_navigation'} />
-                                </div>
+                            <div className={mapStyles.mapMarker} style={{ transform: `rotate(${position?.heading}deg)` }}>
+                                <img src={VehicleTop} alt="" />
                             </div>
                         </Marker>}
                 </Source>

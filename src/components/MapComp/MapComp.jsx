@@ -81,9 +81,9 @@ function MapComp() {
                 newPosition = {
                     latitude: pos.coords.latitude,
                     longitude: pos.coords.longitude,
-                    speed: pos.coords.speed || 0, // Speed in meters per second
-                    heading: pos.coords.heading?.toFixed(3) || 0, // Orientation in degrees, 0-359
-                    accuracy: pos.coords.accuracy?.toFixed(3), // Accuracy in meters
+                    speed: pos.coords.speed || null, // Speed in meters per second
+                    heading: pos.coords.heading?.toFixed(3) || null, // Orientation in degrees, 0-359
+                    accuracy: pos.coords.accuracy?.toFixed(3) || null, // Accuracy in meters
                 }
 
                 // setViewport({

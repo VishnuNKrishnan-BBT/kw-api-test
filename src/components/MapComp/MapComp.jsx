@@ -74,7 +74,7 @@ function MapComp() {
                     latitude: pos.coords.latitude || undefined,
                     longitude: pos.coords.longitude || undefined,
                     speed: `${(pos.coords.speed * 3.6)?.toFixed(0)} km/h` || undefined, // Speed in meters per second
-                    heading: pos.coords.heading?.toFixed(3) || 0, // Orientation in degrees, 0-360
+                    heading: pos.coords.heading?.toFixed(3) || undefined, // Orientation in degrees, 0-360
                     accuracy: pos.coords.accuracy?.toFixed(3) || undefined, // Accuracy in meters
                 })
 

@@ -64,7 +64,9 @@ function MapComp() {
         }
     }
 
-
+    if (response?.data?.status == 200) {
+        newLeg = false
+    }
 
     useEffect(() => {
         const options = {

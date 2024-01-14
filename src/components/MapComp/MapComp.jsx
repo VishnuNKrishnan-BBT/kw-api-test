@@ -35,6 +35,7 @@ function MapComp() {
     }
 
     var newPosition = {}
+    var newLeg = true //Initial value. Will update to false after first upload
 
     const periodicUpload = async (position) => {
         const timestamp = Date.now()
@@ -49,6 +50,7 @@ function MapComp() {
         const apiBody = {
             timestamp: timestamp,
             trackerId: 'API_TEST_MOB',
+            newLeg: newLeg,
             ...position
         }
 
@@ -56,6 +58,10 @@ function MapComp() {
         const response = await uploadWaypoint(apiBody, headers)
         setReceivedContent(response)
         navigator?.vibrate(400)
+
+        if (response?.data?.status == 200) {
+            newLeg = false
+        }
     }
 
 
@@ -74,15 +80,15 @@ function MapComp() {
                     latitude: pos.coords.latitude || undefined,
                     longitude: pos.coords.longitude || undefined,
                     speed: `${(pos.coords.speed * 3.6)?.toFixed(0)} km/h` || undefined, // Speed in meters per second
-                    heading: pos.coords.heading?.toFixed(3) || 0, // Orientation in degrees, 0-360
+                    heading: pos.coords.heading?.toFixed(3) || undefined, // Orientation in degrees, 0-360
                     accuracy: pos.coords.accuracy?.toFixed(3) || undefined, // Accuracy in meters
                 })
 
                 newPosition = {
                     latitude: pos.coords.latitude,
                     longitude: pos.coords.longitude,
-                    speed: pos.coords.speed || null, // Speed in meters per second
-                    heading: pos.coords.heading?.toFixed(3) || null, // Orientation in degrees, 0-359
+                    speed: pos.coords.speed || 0, // Speed in meters per second
+                    heading: pos.coords.heading?.toFixed(3) || 0, // Orientation in degrees, 0-359
                     accuracy: pos.coords.accuracy?.toFixed(3) || null, // Accuracy in meters
                 }
 

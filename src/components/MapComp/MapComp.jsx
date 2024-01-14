@@ -35,6 +35,7 @@ function MapComp() {
     }
 
     var newPosition = {}
+    var newLeg = true //Initial value. Will update to false after first upload
 
     const periodicUpload = async (position) => {
         const timestamp = Date.now()
@@ -49,6 +50,7 @@ function MapComp() {
         const apiBody = {
             timestamp: timestamp,
             trackerId: 'API_TEST_MOB',
+            newLeg: newLeg,
             ...position
         }
 
@@ -56,6 +58,10 @@ function MapComp() {
         const response = await uploadWaypoint(apiBody, headers)
         setReceivedContent(response)
         navigator?.vibrate(400)
+
+        if (response?.data?.status == 200) {
+            newLeg = false
+        }
     }
 
 

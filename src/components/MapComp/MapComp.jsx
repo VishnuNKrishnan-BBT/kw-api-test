@@ -35,6 +35,7 @@ function MapComp() {
     }
 
     var newPosition = {}
+    var newLeg = true //Initial value. Will update to false after first upload
 
     const periodicUpload = async (position) => {
         const timestamp = Date.now()
@@ -58,7 +59,9 @@ function MapComp() {
         navigator?.vibrate(400)
     }
 
-
+    if (response?.data?.status == 200) {
+        newLeg = false
+    }
 
     useEffect(() => {
         const options = {

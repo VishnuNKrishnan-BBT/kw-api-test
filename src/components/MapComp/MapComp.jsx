@@ -59,7 +59,7 @@ function MapComp() {
         setReceivedContent(response)
         navigator?.vibrate(400)
 
-        if (response?.data?.status == 200) {
+        if (response?.status == 200) {
             newLeg = false
         }
     }

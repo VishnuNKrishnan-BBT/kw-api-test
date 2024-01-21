@@ -59,7 +59,7 @@ function MapComp() {
         setReceivedContent(response)
         navigator?.vibrate(400)
 
-        if (response?.status == 200) {
+        if (response?.status == 200 && response?.message == "Waypoint added successfully! undefined") { //==============STATUS CODE REQUIRED FOR THIS=================
             newLeg = false
         }
     }

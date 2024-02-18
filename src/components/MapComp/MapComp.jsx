@@ -9,6 +9,8 @@ import VehicleTop from '../assets/vehicleTop0.png'
 
 function MapComp() {
 
+    const [webSocket, setWebSocket] = useState(null);
+
     const mapRef = useRef(null)
 
     const [position, setPosition] = useState({});
@@ -37,32 +39,86 @@ function MapComp() {
     var newPosition = {}
     var newLeg = true //Initial value. Will update to false after first upload
 
-    const periodicUpload = async (position) => {
-        const timestamp = Date.now()
+    // const periodicUpload = async (position) => {
+    //     const timestamp = Date.now()
 
-        const headers = {
-            'Content-Type': 'application/json',
-            'Authorization': 'your-secret-token'
+    //     const headers = {
+    //         'Content-Type': 'application/json',
+    //         'Authorization': 'your-secret-token'
+    //     };
+
+    //     console.log(position);
+
+    //     const apiBody = {
+    //         timestamp: timestamp,
+    //         trackerId: 'API_TEST_MOB',
+    //         newLeg: newLeg,
+    //         ...position
+    //     }
+
+    //     setSentContent(apiBody)
+    //     const response = await uploadWaypoint(apiBody, headers)
+    //     setReceivedContent(response)
+    //     navigator?.vibrate(400)
+
+    //     if (response?.status == 200 && response?.message == "Waypoint added successfully! undefined") { //==============STATUS CODE REQUIRED FOR THIS=================
+    //         newLeg = false
+    //     }
+    // }
+
+    //Using Websocket
+    useEffect(() => {
+        // Connect to WebSocket server
+        const ws = new WebSocket('wss://kw-ms-ws-obdcomms-eff32c851ad2.herokuapp.com/');
+
+        ws.onopen = () => {
+            console.log('WebSocket connected');
+            setWebSocket(ws);
         };
 
-        console.log(position);
+        ws.onclose = () => {
+            console.log('WebSocket disconnected');
+        };
 
-        const apiBody = {
-            timestamp: timestamp,
-            trackerId: 'API_TEST_MOB',
-            newLeg: newLeg,
-            ...position
+        // Clean up the WebSocket connection on unmount
+        return () => {
+            if (webSocket) {
+                webSocket.close();
+            }
+        };
+    }, []); // Run only once on component mount
+
+    useEffect(() => {
+        if (webSocket) {
+            const interval = setInterval(() => {
+                sendObjectToServer();
+            }, 2000); // Send every 2 seconds
+
+            return () => clearInterval(interval); // Clear interval on component unmount
         }
+    }, [webSocket]); // Run whenever WebSocket instance changes
 
-        setSentContent(apiBody)
-        const response = await uploadWaypoint(apiBody, headers)
-        setReceivedContent(response)
-        navigator?.vibrate(400)
+    const sendObjectToServer = () => {
+        if (webSocket) {
+            const timestamp = Date.now()
 
-        if (response?.status == 200 && response?.message == "Waypoint added successfully! undefined") { //==============STATUS CODE REQUIRED FOR THIS=================
-            newLeg = false
+            const headers = {
+                'Content-Type': 'application/json',
+                'Authorization': 'your-secret-token'
+            };
+
+            console.log(position);
+
+            const apiBody = {
+                timestamp: timestamp,
+                trackerId: 'API_TEST_MOB',
+                newLeg: newLeg,
+                ...position
+            }
+
+            webSocket.send(JSON.stringify(apiBody));
         }
-    }
+    };
 
 
 
@@ -79,7 +135,7 @@ function MapComp() {
                 setPosition({
                     latitude: pos.coords.latitude || undefined,
                     longitude: pos.coords.longitude || undefined,
-                    speed: `${(pos.coords.speed * 3.6)?.toFixed(0)} km/h` || undefined, // Speed in meters per second
+                    speed: pos.coords.speed * 3.6 || undefined, // Speed in meters per second
                     heading: pos.coords.heading?.toFixed(3) || undefined, // Orientation in degrees, 0-360
                     accuracy: pos.coords.accuracy?.toFixed(3) || undefined, // Accuracy in meters
                 })
@@ -107,10 +163,10 @@ function MapComp() {
             options
         )
 
-        const interval = setInterval(() => { periodicUpload(newPosition) }, 2000)
+        //const interval = setInterval(() => { periodicUpload(newPosition) }, 2000)
 
         return () => {
-            clearInterval(interval)
+            // clearInterval(interval)
             navigator.geolocation.clearWatch(watchId);
         }
     }, [])
